@@ -9,7 +9,7 @@ resources:
     type: gitRepo
     integration: "ttrahan-gh"
     pointer:
-      sourceName: "ttrahan/demoSIT"
+      sourceName: "aye0aye/demo-test"
       branch: master
     flags:
       - e2eShippableDemo
