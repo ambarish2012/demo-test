@@ -1,0 +1,38 @@
+jobs:
+
+#---------------------------------------------------------------#
+#----------------------------   Test   -------------------------#
+#---------------------------------------------------------------#
+
+# Deploy to TEST environment
+  - name: e2eshipdemo-deploy-ecs-test
+    type: deploy
+    steps:
+      - IN: prov_ecs_test
+      - IN: e2eshipdemo-release-ecs-beta
+      - IN: e2eshipdemo-params-ecs-test
+      - IN: e2eshipdemo-cluster-ecs-test
+      - IN: e2eshipdemo-alb-test
+        applyTo:
+          - manifest: e2eshipdemo-manifest-ecs
+            image: e2eshipdemo-img-ecs
+            port: 80
+      - TASK: managed
+    flags:
+      - e2eShippableDemo
+
+# Run System Integration Testing
+  - name: sit
+    type: runCLI
+    steps:
+      - IN: e2eshipdemo-deploy-ecs-test
+      - IN: sit_repo
+      - IN: sit_params
+      - TASK:
+        - script: IN/sit_repo/gitRepo/test.sh sit_params
+    on_success:
+      - script: touch /build/state/success.txt
+    on_failure:
+      - script: touch /build/state/failure.txt
+    flags:
+      - e2eShippableDemo
