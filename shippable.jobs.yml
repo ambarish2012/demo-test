@@ -23,7 +23,7 @@ jobs:
 
 # Run System Integration Testing
   - name: sit
-    type: runCLI
+    type: runSh
     steps:
       - IN: e2eshipdemo-deploy-ecs-test
       - IN: sit_repo
